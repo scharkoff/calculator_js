@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,11 +11,13 @@
     <script src="static/main.js" defer></script>
     <title>Калькулятор</title>
 </head>
+
 <body>
     <main>
         <div class="calc-container">
             <div class="screen">
-                <span></span>
+                <span class="equals">=</span>
+                <span class="result">0</span>
             </div>
             <div class="buttons">
                 <div class="digits">
@@ -29,7 +32,7 @@
                     <button class="key digit">3</button>
                     <button class="key digit">0</button>
                     <button class="key digit">.</button>
-                    <button class="key" style="visibility: hidden;"></button>
+                    <!-- <button class="key" style="visibility: hidden;"></button> -->
                 </div>
                 <div class="other">
                     <button class="key operation">+</button>
@@ -45,4 +48,5 @@
         </div>
     </main>
 </body>
+
 </html>

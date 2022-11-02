@@ -1,3 +1,23 @@
+const keys = document.querySelectorAll(".key");
+const result = document.querySelector(".result");
+
+let str = "";
+
+keys.forEach((key) => {
+    key.addEventListener("click", (event) => {
+        const value = event.target.textContent;
+        str += value;
+        result.innerHTML = str;
+        if (value == "C") {
+            result.innerHTML = 0;
+            str = "";
+        }
+        event.target.classList.add("touched");
+        setTimeout(() => event.target.classList.remove("touched"), 100);
+    })
+})
+
+
 // Функция priority позволяет получить 
 // значение приоритета для оператора.
 // Возможные операторы: +, -, *, /.
@@ -37,14 +57,14 @@ function tokenize(str) {
         if (isDigit(char) || char == '.') {
             lastNumber += char;
         } else {
-            if(lastNumber.length > 0) {
+            if (lastNumber.length > 0) {
                 tokens.push(lastNumber);
                 lastNumber = '';
             }
-        } 
+        }
         if (isOperation(char) || char == '(' || char == ')') {
             tokens.push(char);
-        } 
+        }
     }
     if (lastNumber.length > 0) {
         tokens.push(lastNumber);
@@ -77,7 +97,7 @@ function compile(str) {
         } else if (token == '(') {
             stack.push(token);
         } else if (token == ')') {
-            while (stack.length > 0 && stack[stack.length-1] != '(') {
+            while (stack.length > 0 && stack[stack.length - 1] != '(') {
                 out.push(stack.pop());
             }
             stack.pop();
