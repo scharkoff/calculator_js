@@ -3,19 +3,78 @@ const result = document.querySelector(".result");
 
 let str = "";
 
+const digits = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+const opers = ["+", "-", "/", "*", "(", ")", "."];
+
 keys.forEach((key) => {
     key.addEventListener("click", (event) => {
         const value = event.target.textContent;
-        str += value;
-        result.innerHTML = str;
+
         if (value == "C") {
             result.innerHTML = 0;
             str = "";
+        }
+
+        if (value == "=") {
+            getResult();
+        }
+
+        if (digits.indexOf(value) != -1 || opers.indexOf(value) != -1) {
+            str += value;
+            result.innerHTML = str;
         }
         event.target.classList.add("touched");
         setTimeout(() => event.target.classList.remove("touched"), 100);
     })
 })
+
+
+function getResult() {
+    result.innerHTML = evaluate(str);
+    str = evaluate(str);
+}
+
+function evaluate(str) {
+    let stack = [];
+    let lastNumber = ''
+    for (char of compile(str)) {
+        if (isDigit(char) || char == '.') {
+            lastNumber += char;
+        } else {
+            if (lastNumber.length > 0) {
+                stack.push(lastNumber);
+                lastNumber = '';
+            }
+        }
+        if (isOperation(char)) {
+            if (char == '+') {
+                let num2 = stack.pop();
+                let num1 = stack.pop();
+                let sum = parseFloat(num1) + parseFloat(num2);
+                stack.push(sum)
+            }
+            if (char == '-') {
+                let num2 = stack.pop();
+                let num1 = stack.pop();
+                let rus = parseFloat(num1) - parseFloat(num2);
+                stack.push(rus)
+            }
+            if (char == '*') {
+                let num2 = stack.pop();
+                let num1 = stack.pop();
+                let pr = parseFloat(num1) * parseFloat(num2);
+                stack.push(pr)
+            }
+            if (char == '/') {
+                let num2 = stack.pop();
+                let num1 = stack.pop();
+                let del = parseFloat(num1) / parseFloat(num2);
+                stack.push(del)
+            }
+        }
+    }
+    return stack.pop();
+}
 
 
 // Функция priority позволяет получить 
@@ -107,40 +166,4 @@ function compile(str) {
         out.push(stack.pop());
     }
     return out.join(' ');
-}
-
-// Функция evaluate принимает один аргумент -- строку 
-// с арифметическим выражением, записанным в обратной 
-// польской нотации. Возвращаемое значение -- результат 
-// вычисления выражения. Выражение может включать 
-// действительные числа и операторы +, -, *, /.
-// Вам нужно реализовать эту функцию
-// (https://ru.wikipedia.org/wiki/Обратная_польская_запись#Вычисления_на_стеке).
-
-function evaluate(str) {
-    // your code here
-}
-
-// Функция clickHandler предназначена для обработки 
-// событий клика по кнопкам калькулятора. 
-// По нажатию на кнопки с классами digit, operation и bracket
-// на экране (элемент с классом screen) должны появляться 
-// соответствующие нажатой кнопке символы.
-// По нажатию на кнопку с классом clear содержимое экрана 
-// должно очищаться.
-// По нажатию на кнопку с классом result на экране 
-// должен появиться результат вычисления введённого выражения 
-// с точностью до двух знаков после десятичного разделителя (точки).
-// Реализуйте эту функцию. Воспользуйтесь механизмом делегирования 
-// событий (https://learn.javascript.ru/event-delegation), чтобы 
-// не назначать обработчик для каждой кнопки в отдельности.
-
-function clickHandler(event) {
-    // your code here
-}
-
-
-// Назначьте нужные обработчики событий.
-window.onload = function () {
-    // your code here
 }
